@@ -1,34 +1,34 @@
 "use client";
 import Link from "next/link";
-import { signIn } from "@/utils/actions";
-import { useFormState, useFormStatus } from "react-dom";
-import { toast } from "sonner";
-import { useEffect } from "react";
+import { signUp } from "@/utils/actions";
 import { Button } from "@nextui-org/button";
+import { useFormStatus } from "react-dom";
 
-export default function Login() {
-  const [state, signInAction] = useFormState(signIn, {
-    message: "",
-    error: false,
-  });
-
-  useEffect(() => {
-    state.error && toast.error(state.message);
-  }, [state]);
-
+export default function Login({
+  searchParams,
+}: {
+  searchParams: { message: string };
+}) {
   return (
     <div className="grid w-full flex-1 grid-cols-2 justify-center gap-2 p-40">
       <div>
         <h2 className={"text-2xl"}>Attendance-ms</h2>
         <p className={"text-foreground/50"}>
-          Login to your account to access your attendance data
+          Create an account to manage and maintain your attendance data
         </p>
       </div>
       <form
         className="animate-in mx-auto flex w-96 flex-col gap-2 text-foreground"
-        action={signInAction}
+        action={signUp}
       >
-        <h2 className={"text-center text-3xl"}>Login Form</h2>
+        <h2 className={"text-center text-3xl"}>Signup Form</h2>
+        <label htmlFor="name">Name</label>
+        <input
+          className="input mb-2"
+          name="name"
+          placeholder="john doe"
+          required
+        />
         <label htmlFor="email">Email</label>
         <input
           className="input mb-2"
@@ -44,14 +44,16 @@ export default function Login() {
           placeholder="••••••••"
           required
         />
-        <button className="btn-neutral mb-2 text-sm" type={"button"}>
-          Forgot Password ?
-        </button>
         <SubmitButton />
         <div className={"text-center text-foreground/70"}>OR</div>
-        <Link href={"/signup"} className="btn btn-neutral text-center">
-          Sign Up
+        <Link href={"/login"} className="btn btn-neutral text-center">
+          Login
         </Link>
+        {searchParams?.message && (
+          <p className="mt-4 bg-foreground/10 p-4 text-center text-foreground">
+            {searchParams.message}
+          </p>
+        )}
       </form>
     </div>
   );
@@ -67,7 +69,7 @@ function SubmitButton() {
       className={"btn-primary"}
       isLoading={pending}
     >
-      Login
+      Signup
     </Button>
   );
 }
